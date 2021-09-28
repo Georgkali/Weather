@@ -6,12 +6,12 @@ use App\Api;
 use App\Today;
 
 
-if (!isset($_POST["city"])) {
-    $url = "http://api.weatherapi.com/v1/forecast.json?key=6daf6ca9ad6445099bf80229212809&q=Riga&days=7&aqi=no&alerts=no";
-} else {
+if (isset($_POST["city"])) {
     $url = "http://api.weatherapi.com/v1/forecast.json?key=6daf6ca9ad6445099bf80229212809&q={$_POST['city']}&days=7&aqi=no&alerts=no";
-}
 
+} else {
+    $url = "http://api.weatherapi.com/v1/forecast.json?key=6daf6ca9ad6445099bf80229212809&q=Riga&days=7&aqi=no&alerts=no";
+}
 $api = new Api($url);
 $today = new Today($url);
 $today = $today->getData();
@@ -37,11 +37,12 @@ $now = intval(date("H"));
 
 <div class="card">
     <div class="card-body">
-        <?php echo "<h1> {$api->data()->{'location'}->{'name'}} </h1>" ?>
+        <?php echo "<h1> {$api->data()->{'location'}->{'name'}} ({$api->data()->{'location'}->{'country'}})</h1>" ?>
         <form method="post">
             <label for="city">City:</label>
             <input type="text" name="city">
             <input type="submit" value="city">
+
         </form>
 
 
